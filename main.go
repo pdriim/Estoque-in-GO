@@ -20,6 +20,7 @@ func main() {
 
 	// Criando o estoque (map vazio)
 	estoque := make(map[int]Produto)
+	log := []string{}
 
 	fmt.Println("Estoque iniciado:", estoque)
 
@@ -124,6 +125,10 @@ func main() {
 			} else {
 				fmt.Println("Produto atualizado com sucesso!")
 			}
+
+		case 5:
+			fmt.Println("Listar Logs")
+			listarLogs(log)
 
 		case 4:
 			listarProdutosSimples(estoque)
@@ -255,4 +260,19 @@ func atualizarProduto(
 		Preco:      novoPreco,
 	}
 	return nil
+}
+func adicionarLog(logs []string, mensagem string) []string {
+	logs = append(logs, mensagem)
+	return logs
+}
+
+func listarLogs(logs []string) {
+	if len(logs) == 0 {
+		fmt.Println("Nenhum log registrado.")
+		return
+	}
+	fmt.Println("Logs do sistema:")
+	for _, log := range logs {
+		fmt.Println(log)
+	}
 }
