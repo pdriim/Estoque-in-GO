@@ -4,25 +4,13 @@ import (
 	"fmt"
 )
 
-// Produto representa um item do estoque
-type Produto struct {
-	ID         int
-	Nome       string
-	Quantidade int
-	Preco      float64
-}
-
-// proxID controla a geração automática de IDs
-var proxID int = 1
-
 func main() {
 	fmt.Println("Sistema de Controle de Estoque")
 
 	// Criando o estoque (map vazio)
 	estoque := make(map[int]Produto)
-	log := []string{}
-
-	fmt.Println("Estoque iniciado:", estoque)
+	logs := []Log{}
+	fmt.Println("Estoque iniciado:")
 
 	for {
 		fmt.Println("======MENU======")
@@ -30,6 +18,7 @@ func main() {
 		fmt.Println("2 - Listar Produtos")
 		fmt.Println("3 - Atualizar Produto")
 		fmt.Println("4 - Remover Produto")
+		fmt.Println("5 - Listar Logs")
 		fmt.Println("0 - Sair")
 		fmt.Println("================")
 
@@ -74,7 +63,7 @@ func main() {
 
 			fmt.Printf("Produto: %s | Quantidade: %d | Preco: %.2f\n", nome, quantidade, preco)
 
-			err = adicionarProduto(estoque, nome, quantidade, preco)
+			logs, err = adicionarProduto(estoque, nome, quantidade, preco, logs)
 			if err != nil {
 				fmt.Println("Erro ao adicionar produto:", err)
 			} else {
@@ -123,12 +112,9 @@ func main() {
 			if err != nil {
 				fmt.Println("Erro ao atualizar produto:", err)
 			} else {
+				logs = adicionarLog(logs, "INFO", fmt.Sprintf("Produto atualizado: ID %d", id))
 				fmt.Println("Produto atualizado com sucesso!")
 			}
-
-		case 5:
-			fmt.Println("Listar Logs")
-			listarLogs(log)
 
 		case 4:
 			listarProdutosSimples(estoque)
@@ -148,6 +134,10 @@ func main() {
 				fmt.Println("Produto removido com sucesso!")
 			}
 
+		case 5:
+			fmt.Println("Listar Logs")
+			listarLogs(logs)
+
 		case 0:
 			fmt.Println("Saindo do sistema")
 			return // Sai do main e encerra o programa
@@ -156,123 +146,4 @@ func main() {
 		}
 	}
 
-}
-
-// CREATE
-func adicionarProduto(
-	estoque map[int]Produto,
-	nome string,
-	quantidade int,
-	preco float64,
-) error {
-
-	if nome == "" {
-		return fmt.Errorf("nome do produto nao pode ser vazio")
-	}
-	if quantidade < 0 {
-		return fmt.Errorf("quantidade nao pode ser negativa")
-	}
-	if preco <= 0 {
-		return fmt.Errorf("preco deve ser maior que zero")
-	}
-
-	produto := Produto{
-		ID:         proxID,
-		Nome:       nome,
-		Quantidade: quantidade,
-		Preco:      preco,
-	}
-
-	estoque[produto.ID] = produto
-	proxID++
-
-	return nil
-}
-
-func listarProdutosSimples(estoque map[int]Produto) {
-	if len(estoque) == 0 {
-		fmt.Println("Nenhum produto cadastrado.")
-		return
-	}
-
-	fmt.Println("Produtos disponíveis:")
-	for id, produto := range estoque {
-		fmt.Printf("ID %d - %s\n", id, produto.Nome)
-	}
-}
-
-// READ
-func listarProdutos(estoque map[int]Produto) {
-	if len(estoque) == 0 {
-		fmt.Println("Estoque vazio")
-		return
-	}
-
-	for _, produto := range estoque {
-		fmt.Printf(
-			"ID: %d | Nome: %s | Qtd: %d | Preço: %.2f\n",
-			produto.ID,
-			produto.Nome,
-			produto.Quantidade,
-			produto.Preco,
-		)
-	}
-}
-
-// DELETE
-func removerProduto(estoque map[int]Produto, id int) error {
-	if _, existe := estoque[id]; !existe {
-		return fmt.Errorf("produto com ID %d nao encontrado", id)
-	}
-
-	delete(estoque, id)
-	return nil
-}
-
-// UPDATE
-func atualizarProduto(
-	estoque map[int]Produto,
-	id int,
-	novoNome string,
-	novaQuantidade int,
-	novoPreco float64,
-) error {
-
-	produto, existe := estoque[id]
-	if !existe {
-		return fmt.Errorf("produto com ID %d nao encontrado", id)
-	}
-
-	if novoNome == "" {
-		return fmt.Errorf("nome do produto nao pode ser vazio")
-	}
-	if novaQuantidade < 0 {
-		return fmt.Errorf("quantidade nao pode ser negativa")
-	}
-	if novoPreco <= 0 {
-		return fmt.Errorf("preco deve ser maior que zero")
-	}
-
-	estoque[id] = Produto{
-		ID:         produto.ID,
-		Nome:       novoNome,
-		Quantidade: novaQuantidade,
-		Preco:      novoPreco,
-	}
-	return nil
-}
-func adicionarLog(logs []string, mensagem string) []string {
-	logs = append(logs, mensagem)
-	return logs
-}
-
-func listarLogs(logs []string) {
-	if len(logs) == 0 {
-		fmt.Println("Nenhum log registrado.")
-		return
-	}
-	fmt.Println("Logs do sistema:")
-	for _, log := range logs {
-		fmt.Println(log)
-	}
 }
