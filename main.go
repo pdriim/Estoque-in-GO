@@ -138,3 +138,15 @@ func main() {
 		}
 	}
 }
+
+func gerarNovoID(estoque map[int]Produto) int {
+	maiorID := 0
+
+	for id := range estoque {
+		if id > maiorID {
+			maiorID = id
+		}
+	}
+
+	return maiorID + 1
+}

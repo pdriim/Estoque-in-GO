@@ -1,20 +1,20 @@
 {
   "1": {
-    "ID": 0,
+    "ID": 1,
     "Nome": "caneta",
-    "Quantidade": 3444444,
-    "Preco": 21
-  },
-  "2": {
-    "ID": 0,
-    "Nome": "paleta",
-    "Quantidade": 32,
-    "Preco": 43
+    "Quantidade": 23,
+    "Preco": 31
   },
   "3": {
     "ID": 3,
-    "Nome": "dsadas",
-    "Quantidade": 32,
-    "Preco": 324
+    "Nome": "jaca",
+    "Quantidade": 2,
+    "Preco": 34
+  },
+  "4": {
+    "ID": 4,
+    "Nome": "luz",
+    "Quantidade": 2,
+    "Preco": 4
   }
 }

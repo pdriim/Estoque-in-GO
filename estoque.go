@@ -27,7 +27,7 @@ func adicionarProduto(
 		return estoque, logs, errors.New("preco deve ser maior que zero")
 	}
 
-	novoID := len(estoque) + 1
+	novoID := gerarNovoID(estoque)
 
 	produto := Produto{
 		ID:         novoID,

@@ -6,5 +6,37 @@
   {
     "Tipo": "ERROR",
     "Mensagem": "produto nao encontrado"
+  },
+  {
+    "Tipo": "ERROR",
+    "Mensagem": "produto nao encontrado"
+  },
+  {
+    "Tipo": "ERROR",
+    "Mensagem": "produto nao encontrado"
+  },
+  {
+    "Tipo": "INFO",
+    "Mensagem": "Produto 3 removido"
+  },
+  {
+    "Tipo": "INFO",
+    "Mensagem": "Produto adicionado: caneta"
+  },
+  {
+    "Tipo": "INFO",
+    "Mensagem": "Produto adicionado: parede"
+  },
+  {
+    "Tipo": "INFO",
+    "Mensagem": "Produto adicionado: jaca"
+  },
+  {
+    "Tipo": "INFO",
+    "Mensagem": "Produto 2 removido"
+  },
+  {
+    "Tipo": "INFO",
+    "Mensagem": "Produto adicionado: luz"
   }
 ]
