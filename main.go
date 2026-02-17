@@ -44,6 +44,10 @@ func main() {
 			_, err := fmt.Scanln(&nome)
 			if err != nil {
 				fmt.Println("Erro na leitura do nome:", err)
+				logs = append(logs, Log{
+					Tipo:     "ERROR",
+					Mensagem: fmt.Sprintf("Erro na leitura do nome do produto: %v", err),
+				})
 				continue
 			}
 
@@ -51,6 +55,10 @@ func main() {
 			_, err = fmt.Scanln(&quantidade)
 			if err != nil {
 				fmt.Println("Erro na leitura da quantidade:", err)
+				logs = append(logs, Log{
+					Tipo:     "ERROR",
+					Mensagem: fmt.Sprintf("Erro na leitura da quantidade do produto: %v", err),
+				})
 				continue
 			}
 
@@ -58,16 +66,29 @@ func main() {
 			_, err = fmt.Scanln(&preco)
 			if err != nil {
 				fmt.Println("Erro na leitura do preco:", err)
+				logs = append(logs, Log{
+					Tipo:     "ERROR",
+					Mensagem: fmt.Sprintf("Erro na leitura do preco do produto: %v", err),
+				})
 				continue
 			}
 
 			fmt.Printf("Produto: %s | Quantidade: %d | Preco: %.2f\n", nome, quantidade, preco)
+			estoque, logs, err = adicionarProduto(estoque, logs, nome, quantidade, preco)
 
-			logs, err = adicionarProduto(estoque, nome, quantidade, preco, logs)
 			if err != nil {
 				fmt.Println("Erro ao adicionar produto:", err)
+				logs = append(logs, Log{
+					Tipo:     "ERROR",
+					Mensagem: fmt.Sprintf("Erro ao adicionar produto: %v", err),
+				})
+				continue
 			} else {
 				fmt.Println("Produto adicionado com sucesso!")
+				logs = append(logs, Log{
+					Tipo:     "INFO",
+					Mensagem: fmt.Sprintf("Produto adicionado: Nome=%s", nome),
+				})
 			}
 
 		case 2:
@@ -82,6 +103,10 @@ func main() {
 			_, err := fmt.Scanln(&id)
 			if err != nil {
 				fmt.Println("Erro na leitura do ID:", err)
+				logs = append(logs, Log{
+					Tipo:     "ERROR",
+					Mensagem: fmt.Sprintf("Erro na leitura do ID do produto: %v", err),
+				})
 				continue
 			}
 			var novoNome string
@@ -91,6 +116,10 @@ func main() {
 			_, err = fmt.Scanln(&novoNome)
 			if err != nil {
 				fmt.Println("Erro na leitura do novo nome:", err)
+				logs = append(logs, Log{
+					Tipo:     "ERROR",
+					Mensagem: fmt.Sprintf("Erro na leitura do novo nome do produto: %v", err),
+				})
 				continue
 			}
 
@@ -98,6 +127,10 @@ func main() {
 			_, err = fmt.Scanln(&novaQuantidade)
 			if err != nil {
 				fmt.Println("Erro na leitura da nova quantidade:", err)
+				logs = append(logs, Log{
+					Tipo:     "ERROR",
+					Mensagem: fmt.Sprintf("Erro na leitura da nova quantidade do produto: %v", err),
+				})
 				continue
 			}
 
@@ -105,14 +138,25 @@ func main() {
 			_, err = fmt.Scanln(&novoPreco)
 			if err != nil {
 				fmt.Println("Erro na leitura do novo preco:", err)
+				logs = append(logs, Log{
+					Tipo:     "ERROR",
+					Mensagem: fmt.Sprintf("Erro na leitura do novo preco do produto: %v", err),
+				})
 				continue
 			}
 
 			err = atualizarProduto(estoque, id, novoNome, novaQuantidade, novoPreco)
 			if err != nil {
 				fmt.Println("Erro ao atualizar produto:", err)
+				logs = append(logs, Log{
+					Tipo:     "ERROR",
+					Mensagem: fmt.Sprintf("Erro ao atualizar produto ID %d: %v", id, err),
+				})
 			} else {
-				logs = adicionarLog(logs, "INFO", fmt.Sprintf("Produto atualizado: ID %d", id))
+				logs = append(logs, Log{
+					Tipo:     "UPDATE",
+					Mensagem: fmt.Sprintf("Produto atualizado: ID=%d | Nome=%s", id, novoNome),
+				})
 				fmt.Println("Produto atualizado com sucesso!")
 			}
 
@@ -130,6 +174,10 @@ func main() {
 			err = removerProduto(estoque, id)
 			if err != nil {
 				fmt.Println("Erro ao remover produto:", err)
+				logs = append(logs, Log{
+					Tipo:     "ERROR",
+					Mensagem: fmt.Sprintf("Erro ao remover produto ID %d: %v", id, err),
+				})
 			} else {
 				fmt.Println("Produto removido com sucesso!")
 			}
@@ -143,7 +191,10 @@ func main() {
 			return // Sai do main e encerra o programa
 		default:
 			fmt.Println("Opcao invalida")
+			logs = append(logs, Log{
+				Tipo:     "ERROR",
+				Mensagem: fmt.Sprintf("Opcao invalida selecionada: %d", opcao),
+			})
 		}
 	}
-
 }

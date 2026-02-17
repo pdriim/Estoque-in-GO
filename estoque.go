@@ -1,59 +1,42 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"sort"
+)
+
+var ultimoID int
 
 func adicionarProduto(
 	estoque map[int]Produto,
+	logs []Log,
 	nome string,
 	quantidade int,
 	preco float64,
-	logs []Log,
-) ([]Log, error) {
+) (map[int]Produto, []Log, error) {
 
 	if nome == "" {
-		logs = adicionarLog(logs, "ERROR", "Nome do produto nao pode ser vazio")
-		return logs, fmt.Errorf("nome do produto nao pode ser vazio")
+		return estoque, logs, fmt.Errorf("nome do produto nao pode ser vazio")
 	}
 
 	if quantidade < 0 {
-		logs = adicionarLog(logs, "ERROR", "Quantidade nao pode ser negativa")
-		return logs, fmt.Errorf("quantidade nao pode ser negativa")
+		return estoque, logs, fmt.Errorf("quantidade nao pode ser negativa")
 	}
 
 	if preco <= 0 {
-		logs = adicionarLog(logs, "ERROR", "Preco deve ser maior que zero")
-		return logs, fmt.Errorf("preco deve ser maior que zero")
+		return estoque, logs, fmt.Errorf("preco deve ser maior que zero")
 	}
 
-	produto := Produto{
-		ID:         proxID,
+	ultimoID++
+	id := ultimoID
+
+	estoque[id] = Produto{
 		Nome:       nome,
 		Quantidade: quantidade,
 		Preco:      preco,
 	}
 
-	estoque[produto.ID] = produto
-	proxID++
-
-	logs = adicionarLog(
-		logs,
-		"INFO",
-		fmt.Sprintf("Produto adicionado: ID=%d | Nome=%s", produto.ID, produto.Nome),
-	)
-
-	return logs, nil
-}
-
-func listarProdutosSimples(estoque map[int]Produto) {
-	if len(estoque) == 0 {
-		fmt.Println("Nenhum produto cadastrado.")
-		return
-	}
-
-	fmt.Println("Produtos disponíveis:")
-	for id, produto := range estoque {
-		fmt.Printf("ID %d - %s\n", id, produto.Nome)
-	}
+	return estoque, logs, nil
 }
 
 // READ
@@ -63,10 +46,21 @@ func listarProdutos(estoque map[int]Produto) {
 		return
 	}
 
-	for _, produto := range estoque {
+	// Criar slice de IDs
+	var ids []int
+	for id := range estoque {
+		ids = append(ids, id)
+	}
+
+	// Ordenar IDs
+	sort.Ints(ids)
+
+	// Listar ordenado
+	for _, id := range ids {
+		produto := estoque[id]
 		fmt.Printf(
 			"ID: %d | Nome: %s | Qtd: %d | Preço: %.2f\n",
-			produto.ID,
+			id,
 			produto.Nome,
 			produto.Quantidade,
 			produto.Preco,
@@ -115,4 +109,23 @@ func atualizarProduto(
 		Preco:      novoPreco,
 	}
 	return nil
+}
+
+func listarProdutosSimples(estoque map[int]Produto) {
+	if len(estoque) == 0 {
+		fmt.Println("Nenhum produto cadastrado.")
+		return
+	}
+
+	var ids []int
+	for id := range estoque {
+		ids = append(ids, id)
+	}
+
+	sort.Ints(ids)
+
+	fmt.Println("Produtos disponíveis:")
+	for _, id := range ids {
+		fmt.Printf("ID %d - %s\n", id, estoque[id].Nome)
+	}
 }
