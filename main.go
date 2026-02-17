@@ -1,8 +1,30 @@
 package main
 
 import (
+	"bufio"
 	"fmt"
+	"os"
+	"strconv"
+	"strings"
 )
+
+var reader = bufio.NewReader(os.Stdin)
+
+func lerString(mensagem string) string {
+	fmt.Print(mensagem)
+	texto, _ := reader.ReadString('\n')
+	return strings.TrimSpace(texto)
+}
+
+func lerInt(mensagem string) (int, error) {
+	input := lerString(mensagem)
+	return strconv.Atoi(input)
+}
+
+func lerFloat(mensagem string) (float64, error) {
+	input := lerString(mensagem)
+	return strconv.ParseFloat(input, 64)
+}
 
 func main() {
 	fmt.Println("Sistema de Controle de Estoque")
@@ -20,14 +42,17 @@ func main() {
 	}
 
 	for {
-		fmt.Println("\n====== MENU ======")
+		fmt.Println("\n==============================")
+		fmt.Println(" SISTEMA DE CONTROLE ESTOQUE ")
+		fmt.Println("==============================")
+		fmt.Printf("Total de produtos: %d\n", len(estoque))
 		fmt.Println("1 - Adicionar Produto")
 		fmt.Println("2 - Listar Produtos")
 		fmt.Println("3 - Atualizar Produto")
 		fmt.Println("4 - Remover Produto")
 		fmt.Println("5 - Listar Logs")
 		fmt.Println("0 - Sair")
-		fmt.Println("===================")
+		fmt.Println("==============================")
 
 		var opcao int
 		fmt.Print("Escolha uma opcao: ")
@@ -44,14 +69,24 @@ func main() {
 			var quantidade int
 			var preco float64
 
-			fmt.Print("Nome: ")
-			fmt.Scanln(&nome)
+			nome = lerString("Nome: ")
 
-			fmt.Print("Quantidade: ")
-			fmt.Scanln(&quantidade)
+			if nome == "" {
+				fmt.Println("Nome nao pode ser vazio.")
+				continue
+			}
 
-			fmt.Print("Preco: ")
-			fmt.Scanln(&preco)
+			quantidade, err := lerInt("Quantidade: ")
+			if err != nil || quantidade < 0 {
+				fmt.Println("Quantidade invalida.")
+				continue
+			}
+
+			preco, err = lerFloat("Preco: ")
+			if err != nil || preco <= 0 {
+				fmt.Println("Preco invalido.")
+				continue
+			}
 
 			estoque, logs, err = adicionarProduto(estoque, logs, nome, quantidade, preco)
 			if err != nil {

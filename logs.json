@@ -38,5 +38,9 @@
   {
     "Tipo": "INFO",
     "Mensagem": "Produto adicionado: luz"
+  },
+  {
+    "Tipo": "INFO",
+    "Mensagem": "Produto adicionado: Caneta"
   }
 ]

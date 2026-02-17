@@ -16,5 +16,11 @@
     "Nome": "luz",
     "Quantidade": 2,
     "Preco": 4
+  },
+  "5": {
+    "ID": 5,
+    "Nome": "Caneta",
+    "Quantidade": 32,
+    "Preco": 43
   }
 }
