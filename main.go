@@ -8,7 +8,11 @@ func main() {
 	fmt.Println("Sistema de Controle de Estoque")
 
 	// Criando o estoque (map vazio)
-	estoque := make(map[int]Produto)
+	estoque, err := carregarEstoque()
+	if err != nil {
+		fmt.Println("Erro ao carregar estoque:", err)
+		return
+	}
 	logs := []Log{}
 	fmt.Println("Estoque iniciado:")
 
@@ -89,6 +93,12 @@ func main() {
 					Tipo:     "INFO",
 					Mensagem: fmt.Sprintf("Produto adicionado: Nome=%s", nome),
 				})
+
+				err = salvarEstoque(estoque)
+				if err != nil {
+					fmt.Println("Erro ao salvar estoque:", err)
+				}
+
 			}
 
 		case 2:
@@ -158,6 +168,12 @@ func main() {
 					Mensagem: fmt.Sprintf("Produto atualizado: ID=%d | Nome=%s", id, novoNome),
 				})
 				fmt.Println("Produto atualizado com sucesso!")
+
+				err = salvarEstoque(estoque)
+				if err != nil {
+					fmt.Println("Erro ao salvar estoque:", err)
+				}
+
 			}
 
 		case 4:
@@ -180,6 +196,15 @@ func main() {
 				})
 			} else {
 				fmt.Println("Produto removido com sucesso!")
+				logs = append(logs, Log{
+					Tipo:     "INFO",
+					Mensagem: fmt.Sprintf("Produto removido: ID=%d", id),
+				})
+				err = salvarEstoque(estoque)
+				if err != nil {
+					fmt.Println("Erro ao salvar estoque:", err)
+				}
+
 			}
 
 		case 5:
