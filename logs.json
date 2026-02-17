@@ -1,0 +1,10 @@
+[
+  {
+    "Tipo": "INFO",
+    "Mensagem": "Produto adicionado: dsadas"
+  },
+  {
+    "Tipo": "ERROR",
+    "Mensagem": "produto nao encontrado"
+  }
+]

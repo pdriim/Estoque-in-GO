@@ -1,6 +1,5 @@
 package main
 
-// Produto representa um item do estoque
 type Produto struct {
 	ID         int
 	Nome       string
@@ -8,5 +7,7 @@ type Produto struct {
 	Preco      float64
 }
 
-// proxID controla a geração automática de IDs
-var proxID int = 1
+type Log struct {
+	Tipo     string
+	Mensagem string
+}
